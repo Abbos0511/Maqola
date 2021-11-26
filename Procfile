@@ -1,0 +1,1 @@
+web: gunicorn Maqola.wsgi --log-file -
