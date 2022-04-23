@@ -9,3 +9,5 @@ router.register(r'article', views.ArticleView, basename='article')
 router.register(r'article_by_tag', views.ArticleByTagView, basename='article_by_tag')
 router.register(r'link_files', views.FilesView, basename='link_files')
 router.register(r'file_by_article', views.FileByArticleView, basename='file_by_article')
+
+urlpatterns=router.urls

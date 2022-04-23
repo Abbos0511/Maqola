@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-)e@xxrq-td4sevlq(ux=)b-mfjkkvb1ek%bm$q1cz27_j70nw%
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -38,10 +38,35 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_yasg',
     'app',
-    'rest_framework'
+    
+    # dj rest auth
+    'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth'
+    
+
+    
 
 ]
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+#     ],
+# }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    )
+    
+}
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'my-app-auth'
+JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',

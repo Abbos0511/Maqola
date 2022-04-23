@@ -3,6 +3,11 @@ from rest_framework.response import Response
 from .serializers import *
 from rest_framework import viewsets, status
 
+from rest_framework.permissions import AllowAny
+from rest_framework.generics import CreateAPIView
+
+
+
 
 class AutorView(viewsets.ModelViewSet):
     queryset = Autor.objects.all()
@@ -48,9 +53,18 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
+
 class ArticleView(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+
+
+
+    def delete(self, request, pk, format=None):
+        article_id = self.get_object(pk)
+        article_id.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.queryset, many=True)
@@ -79,7 +93,7 @@ class ArticleByTagView(viewsets.ModelViewSet):
     serializer_class = ArticleByTagSerializer
     def retrieve(self, request, *args, **kwargs):
         tag=kwargs['pk']
-        articles=self.queryset.filter(tags__contains=tag)
+        articles = self.queryset.filter(published_time__contains=tag)
         datas=[]
         for art in articles:
             f={
@@ -91,6 +105,7 @@ class ArticleByTagView(viewsets.ModelViewSet):
             }
             datas.append(f)
         return Response({'art':datas})
+
 
 class FilesView(viewsets.ModelViewSet):
     queryset = LinkedFiles.objects.all()
@@ -104,3 +119,9 @@ class FileByArticleView(viewsets.ModelViewSet):
         files=self.queryset.filter(article_id=article_id)
         serializer=self.get_serializer(files, many=True)
         return Response(serializer.data)
+
+
+# register
+class RegisterView(CreateAPIView):
+    serializer_class = RegisterCustomSerializer
+    permission_classes = [AllowAny]
